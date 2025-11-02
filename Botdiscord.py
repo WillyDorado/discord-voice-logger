@@ -4,6 +4,7 @@ import datetime
 import traceback
 from dotenv import load_dotenv
 import os
+import asyncio
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
@@ -107,4 +108,14 @@ async def on_voice_state_update(member, before, after):
 
 # --- INICIAR BOT ---
 print(f"TOKEN loaded? {'Yes' if TOKEN else 'No'}")
-bot.run(TOKEN)
+
+# --- Ejecutar el bot con auto-reinicio ---
+async def run_bot():
+    while True:
+        try:
+            await bot.start(TOKEN)
+        except Exception as e:
+            print(f"⚠️ Bot crashed with error: {e}. Restarting in 10 seconds...")
+            await asyncio.sleep(10)
+
+asyncio.run(run_bot())
