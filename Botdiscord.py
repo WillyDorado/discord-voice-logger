@@ -120,3 +120,5 @@ def run_web():
     app.run(host='0.0.0.0', port=8080)
 
 Thread(target=run_web).start()
+
+bot.run(TOKEN)
