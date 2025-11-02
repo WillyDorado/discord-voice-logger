@@ -4,7 +4,8 @@ import datetime
 import traceback
 from dotenv import load_dotenv
 import os
-import asyncio
+from flask import Flask
+from threading import Thread
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
@@ -109,13 +110,13 @@ async def on_voice_state_update(member, before, after):
 # --- INICIAR BOT ---
 print(f"TOKEN loaded? {'Yes' if TOKEN else 'No'}")
 
-# --- Ejecutar el bot con auto-reinicio ---
-async def run_bot():
-    while True:
-        try:
-            await bot.start(TOKEN)
-        except Exception as e:
-            print(f"⚠️ Bot crashed with error: {e}. Restarting in 10 seconds...")
-            await asyncio.sleep(10)
+app = Flask('')
 
-asyncio.run(run_bot())
+@app.route('/')
+def home():
+    return "Bot is alive!"
+
+def run_web():
+    app.run(host='0.0.0.0', port=8080)
+
+Thread(target=run_web).start()
